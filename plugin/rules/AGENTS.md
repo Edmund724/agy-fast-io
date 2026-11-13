@@ -1,39 +1,40 @@
-# 快速检索与读写规则（fast-io）
+# 快速检索与读写规则（fast-io / Windows pwsh）
 
 目标：用最少的回合完成任务。每多一个回合要多等 10 秒以上；桌面版里，白名单外的命令和每次改文件还要多等约 2 秒安全审查。
 
 ## 1. 找代码：先定位，再精读
 
 - 不知道代码在哪时，先用一条 `grep` 拿到文件和行号，不要靠逐个打开文件来找。
-  - 搜内容：`grep -rn 'Pattern' Sources Tests`。写明要搜的源码目录，不要对 `.` 或含构建产物的目录递归搜索。
-  - 只要文件名：`grep -rln 'Pattern' Sources`
+  - 搜内容：`grep -rn 'Pattern' src tests`。写明要搜的源码目录，不要对 `.` 或含构建产物（如 `node_modules`、`dist`、`target`）的目录递归搜索。
+  - 只要文件名：`grep -rln 'Pattern' src`
   - 按文件名找文件：`git ls-files | grep -i 'name'`
-  - 看结构：`ls Sources/Module`、`git ls-files Sources/Module | head -100`
+  - 看结构：`ls src\module`、`git ls-files src\module | head -100`
 - 有了行号后，用 `read_file` 带 `StartLine` / `EndLine` 读命中位置附近，一次读够：一段读 150–200 行（命中行之前少一些、之后多一些），宁可多读，也不要读完再回头补前后几十行。300 行以内的文件直接整份读。大文件不要从第 1 行整份读，也不要按 800 行一页往下翻。
 - 同一轮里，把已经确定要读的文件、互不依赖的搜索一次性并行发出。不要读一个、想一下、再读下一个。
 - 同一个文件要看几处时，在同一轮里并行读这几段；几处离得近（相距 200 行以内）就读一段把它们都覆盖住。不要一轮只读一段。
 - 只读和问题直接相关的文件。先看 grep 命中了哪些文件，再挑最相关的读；不要为了“全面”把整个目录读一遍。
 - 读过且没改过的内容不要重读。
 
-## 2. 命令写法
+## 2. 命令写法（Windows PowerShell / pwsh）
 
-桌面版会把白名单外的命令送去远程审查，每次约 2 秒。命令分两类处理。
+桌面版默认在 `pwsh` 中执行命令，并会把白名单外的命令送去远程审查，每次约 2 秒。命令分两类处理。
 
 ### 检索和查看：只用白名单内的命令
 
 检索和查看时只用：
 
-`ls` `cat` `head` `tail` `wc` `grep` `diff` `stat` `du` `jq` `which` `pwd` `echo` `basename` `dirname` `realpath`，以及 `git status`、`git diff`、`git log`、`git show`、`git ls-files`、`git rev-parse`。
+`ls` `cat` `head` `tail` `wc` `grep` `stat` `du` `pwd` `echo` `basename` `dirname` `realpath`，以及 `git status`、`git diff`、`git log`、`git show`、`git ls-files`、`git rev-parse`。
 
-- 这些命令之间可以用 `|` 串起来，例如 `grep -rn 'x' Sources | head -50`。
+- 注意 `pwsh` 别名差异：`ls`（`Get-ChildItem`）、`cat`（`Get-Content`）、`diff`（`Compare-Object`）是 PowerShell 内置别名，**不要传 Unix 参数**（如 `ls -la`、`cat -n`、`diff -u`）；对比差异用 `git diff`。
+- 这些命令之间可以用 `|` 串起来，例如 `grep -rn 'x' src | head -50`。
 - 检索时不要用 `rg` `fd` `find` `sed` `awk` `sort` `uniq` `xargs` `python`。
-- 不要写 `&&` `||` `;` `>` `2>/dev/null` `$(...)` 和反引号，命令前不要加 `VAR=value`，命令本身只写裸命令名（如 `grep`，不写 `/usr/bin/grep`）。不写 `cd`；不在当前工作目录时，直接把加引号的目标路径传给命令（如 `grep -rn 'x' '/abs/path/Sources'`），路径中不要带 `..`。
-- glob 和正则一律加引号，例如 `--include='*.swift'`。
+- 不要写 `&&` `||` `;` `>` `2>$null` `$(...)` 和反引号 `` ` ``，命令前不要加 `$env:VAR=...;`（也不要写 Bash 的 `2>/dev/null` 或 `VAR=value`），命令本身只写裸命令名（如 `grep`，不写完整 `.exe` 路径）。不写 `cd`；不在当前工作目录时，直接把单引号包裹的目标路径传给命令（如 `grep -rn 'x' 'D:\path\to\src'`），路径中不要带 `..`。
+- glob 和正则一律加单引号，例如 `--include='*.ts'`。
 - git 参数用长写法：`git log --max-count=5 --oneline`，不写 `-5`。
 
 ### 跑脚本、构建、测试：能合并就一次跑完
 
-`python3`、`node`、`npm`、`swift`、`ego-browser`、项目脚本这类白名单外的命令，每次调用都要送审；用 `&&` 串起来也只审一次。每多拆一轮，还要多等一个模型回合（10 秒以上）。
+`python`、`node`、`npm`、`Get-Command`、项目脚本这类白名单外的命令，每次调用都要送审；在 `pwsh`（PowerShell 7）中用 `&&` 串起来也只审一次。每多拆一轮，还要多等一个模型回合（10 秒以上）。
 
 - 互不依赖、不需要先看上一步结果的几步，合在一次 `run_command` 里跑完：用 `&&` 串起来（某一步失败也要继续跑后面的，就用 `;`），或者写一个小脚本一次做完。
 - 要根据上一步的输出决定下一步时（比如先看报错再改），照常分开跑。
@@ -45,7 +46,7 @@
 - 小改动用 `edit_file`，不要用 `write_file` 重写整个文件。
 - 改名、替换这类改动：grep 输出的那一整行已经能在文件里唯一定位时，直接拿这一行做 Target 调 `edit_file`，不用先 `read_file`。
 - 同一文件里相邻的几处修改，合成一次 `edit_file`（Target 取覆盖这几处的连续片段）。
-- 互不依赖的修改在同一轮并行发出；跨 5 个以上文件的同类机械替换，改用一次 `python3` 脚本批量完成，避免多次排队送审。
+- 互不依赖的修改在同一轮并行发出；跨 5 个以上文件的同类机械替换，改用一次 `python` 脚本批量完成，避免多次排队送审（Windows 下用 `python`，不要写 `python3`）。
 
 ## 4. 回答要短
 
