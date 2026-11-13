@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">Antigravity 每走一步，都在等什么</title>
+  <desc id="desc">Antigravity 桌面版 Agent 的一个循环：模型每轮要想 10 到 20 秒，发出工具调用后先过本地白名单检查；在名单里的命令直接执行，不在名单里的命令和每次改文件都要先送云端小模型审查，每次 2 到 3 秒，可疑或超时还会再审一次；结果回到模型，再开始下一轮。四个编号标出 fast-io 改变的地方：少走回合、检索不送审、脚本合并跑、回答写短。</desc>
+  <style>
+    .sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8B93A1"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="700" rx="24" fill="#0D1017"/>
+
+  <g id="heading" class="sans">
+    <text x="64" y="80" font-size="40" font-weight="700" fill="#EEF1F5">Antigravity 每走一步，都在等什么</text>
+    <text x="64" y="120" font-size="21" fill="#8B93A1">桌面版 Agent 的一个循环。<tspan fill="#4FD1A5" font-weight="700">绿色编号</tspan>是 fast-io 动手的地方。</text>
+  </g>
+
+  <!-- connectors -->
+  <g id="connectors" fill="none" stroke="#8B93A1" stroke-width="2">
+    <path d="M356 310 H398" marker-end="url(#arrow)"/>
+    <path d="M644 310 H682 V225 H712" marker-end="url(#arrow)"/>
+    <path d="M644 310 H682 V395 H712" marker-end="url(#arrow)"/>
+    <path d="M1120 225 H1150 V510 H210 V378" marker-end="url(#arrow)"/>
+    <path d="M1120 395 H1150"/>
+  </g>
+  <text x="677" y="545" text-anchor="middle" class="sans" font-size="20" fill="#8B93A1">执行完，结果回到模型，再想下一步</text>
+
+  <!-- A: model turn -->
+  <g id="model-turn" class="sans">
+    <rect x="64" y="245" width="292" height="130" rx="14" fill="#182036" stroke="#6F8CFF" stroke-width="2"/>
+    <text x="210" y="300" text-anchor="middle" font-size="27" font-weight="700" fill="#EEF1F5">模型想下一步</text>
+    <text x="210" y="336" text-anchor="middle" font-size="21" fill="#AEB8E6">每轮 10–20 秒，最大的开销</text>
+  </g>
+
+  <!-- B: local allowlist -->
+  <g id="local-check" class="sans">
+    <rect x="404" y="245" width="240" height="130" rx="14" fill="#151A23" stroke="#3A4252" stroke-width="2"/>
+    <text x="524" y="300" text-anchor="middle" font-size="25" font-weight="700" fill="#EEF1F5">本地白名单检查</text>
+    <text x="524" y="336" text-anchor="middle" font-size="21" fill="#8B93A1">几微秒</text>
+  </g>
+
+  <!-- C: allowed -->
+  <g id="allowed" class="sans">
+    <rect x="720" y="160" width="400" height="130" rx="14" fill="#151A23" stroke="#3A4252" stroke-width="2"/>
+    <text x="748" y="204" font-size="24" font-weight="700" fill="#EEF1F5">在名单里：直接执行</text>
+    <text x="748" y="240" class="mono" font-size="20" fill="#C9CED6">grep  cat  ls  head  git log</text>
+    <text x="748" y="272" font-size="20" fill="#8B93A1">不用等</text>
+  </g>
+
+  <!-- D: remote review -->
+  <g id="review" class="sans">
+    <rect x="720" y="330" width="400" height="130" rx="14" fill="#2A2114" stroke="#F2A541" stroke-width="2"/>
+    <text x="748" y="374" font-size="24" font-weight="700" fill="#F7C77E">不在名单里：先送云端审查</text>
+    <text x="748" y="410" class="mono" font-size="20" fill="#C9CED6">rg  find  &amp;&amp;  改文件  跑脚本</text>
+    <text x="748" y="442" font-size="20" fill="#B9A68A">每次 2–3 秒，可疑或超时再审一次</text>
+  </g>
+
+  <!-- markers -->
+  <g id="markers" class="sans" font-size="20" font-weight="800" text-anchor="middle" fill="#0D1017">
+    <circle cx="96" cy="245" r="18" fill="#4FD1A5"/><text x="96" y="252">1</text>
+    <circle cx="138" cy="245" r="18" fill="#4FD1A5"/><text x="138" y="252">4</text>
+    <circle cx="752" cy="160" r="18" fill="#4FD1A5"/><text x="752" y="167">2</text>
+    <circle cx="752" cy="330" r="18" fill="#4FD1A5"/><text x="752" y="337">3</text>
+  </g>
+
+  <!-- what fast-io does -->
+  <line x1="64" y1="588" x2="1136" y2="588" stroke="#232833" stroke-width="2"/>
+  <g id="fixes" class="sans">
+    <g transform="translate(64 600)">
+      <circle cx="14" cy="22" r="14" fill="#4FD1A5"/><text x="14" y="28" text-anchor="middle" font-size="17" font-weight="800" fill="#0D1017">1</text>
+      <text x="38" y="30" font-size="22" font-weight="700" fill="#EEF1F5">少走回合</text>
+      <text x="0" y="66" font-size="20" fill="#A3AAB6">先 grep 定位，一轮读完</text>
+    </g>
+    <g transform="translate(334 600)">
+      <circle cx="14" cy="22" r="14" fill="#4FD1A5"/><text x="14" y="28" text-anchor="middle" font-size="17" font-weight="800" fill="#0D1017">2</text>
+      <text x="38" y="30" font-size="22" font-weight="700" fill="#EEF1F5">检索不送审</text>
+      <text x="0" y="66" font-size="20" fill="#A3AAB6">只用名单里的命令</text>
+    </g>
+    <g transform="translate(604 600)">
+      <circle cx="14" cy="22" r="14" fill="#4FD1A5"/><text x="14" y="28" text-anchor="middle" font-size="17" font-weight="800" fill="#0D1017">3</text>
+      <text x="38" y="30" font-size="22" font-weight="700" fill="#EEF1F5">脚本合并跑</text>
+      <text x="0" y="66" font-size="20" fill="#A3AAB6">几步合成一次，只审一次</text>
+    </g>
+    <g transform="translate(874 600)">
+      <circle cx="14" cy="22" r="14" fill="#4FD1A5"/><text x="14" y="28" text-anchor="middle" font-size="17" font-weight="800" fill="#0D1017">4</text>
+      <text x="38" y="30" font-size="22" font-weight="700" fill="#EEF1F5">回答写短</text>
+      <text x="0" y="66" font-size="20" fill="#A3AAB6">先给结论，不复述代码</text>
+    </g>
+  </g>
+</svg>
