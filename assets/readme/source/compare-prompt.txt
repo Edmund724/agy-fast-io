@@ -1,0 +1,30 @@
+用途：GitHub README 里的解释配图，横版，要让没用过的人 10 秒内看懂“装插件前后，AI Agent 取文件的方式有什么不同”。
+核心结论：没装插件时，Agent 一次只拿一页，来回跑很多趟，每趟都要在“云端审查”的关卡前停下等待；装上 fast-io 后，Agent 一次把要的页都拿齐，走“免审通道”，一趟就到。
+
+场景：米白色、带轻微纸张纹理的真实桌面环境（不是纯白空画布）。画面左右分成两个并排的区域，中间用一条细竖线分开。
+
+左半边（没装插件）：
+- 最左边是一个高高的文件柜，右边是一张书桌。
+- 极简火柴人主角（圆脑袋、细圆框眼镜、点状眼睛、简单微笑、细线条四肢）手里只拿着一张纸，沿着一条虚线路径从文件柜走向书桌。
+- 虚线路径在文件柜和书桌之间来回绕了好几圈，表示跑了很多趟。
+- 路径中间有一个小关卡：放下的栏杆和一个沙漏，关卡用柔和的橙色，主角正停在关卡前等待，头上有一个小小的省略号。
+
+右半边（装上 fast-io）：
+- 同样的文件柜和书桌。
+- 主角双臂抱着一叠整齐的好几页纸，沿着一条笔直的路径一趟走到书桌。
+- 路径经过一条栏杆已经抬起的通道，通道用柔和的绿色。
+- 书桌上放着一份完成的文件，带一个绿色的对勾。
+
+配色：黑、白、网点灰为主；橙色只表示等待和关卡，绿色只表示免审通道和完成；可以有一两颗暖黄色小星星点缀。
+
+图中文字（逐字）：把下面这些文字作为插画的一部分画进画面，每个只出现一次，不翻译、不改写、不重复、不添加任何其他文字。使用现代无衬线中文字体，中粗或粗体，大而清晰：
+- "没装插件"：写在左半边顶部的一块小标题牌上；
+- "装上 fast-io"：写在右半边顶部的一块小标题牌上（fast-io 是英文小写字母 f-a-s-t-连字符-i-o）；
+- "云端审查"：写在左半边关卡的牌子上；
+- "一次拿一页"：写在左半边主角手里那张纸旁边的小标签上；
+- "免审通道"：写在右半边抬起栏杆的通道牌子上；
+- "一次拿齐"：写在右半边主角怀里那叠纸旁边的小标签上。
+
+风格：Professional editorial manga/comic ink illustration. Clean confident black ink outlines with varied line weights, expressive but controlled. Use classic circular halftone screentone for gray and shadow areas. Render only the protagonist and the listed objects; no dog, no other people. Off-white lightly textured real environment. Typography is modern sans-serif, medium or bold, large and readable.
+
+避免：3D、光泽渐变、照片感、卡片网格、仪表盘、无关杂物、小字、长段落、水印、多余文字。

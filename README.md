@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/readme/hero.svg" width="100%" alt="fast-io：让 Antigravity 少走回合、少等审查。它处理 Antigravity 的四个问题：回合太多，改成先 grep 定位、一轮读完；检索触发云端审查，改成只用免审命令；脚本一步一跑，改成几步合成一次；回答太长，改成先给结论。实测用时和回合都少了约一半。">
+  <img src="./assets/readme/hero.webp" width="100%" alt="fast-io，Antigravity 插件：让 Antigravity 少走回合、少等审查，实测用时和回合都少了约一半。插画：戴眼镜的线条小人一次抱着一叠文件轻快地走，黄色牧羊犬叼着文件跟在旁边。">
 </p>
 
 fast-io 是一个 Antigravity 插件，里面只有一份规则（[`plugin/rules/AGENTS.md`](plugin/rules/AGENTS.md)），没有工具、Hook，也没有 MCP。它改的是 Agent 干活的习惯：怎么找代码、一次读多少、命令怎么写、回答写多长。同样的任务，模型回合更少，桌面版要等的云端审查也更少。
@@ -22,7 +22,7 @@ fast-io 是一个 Antigravity 插件，里面只有一份规则（[`plugin/rules
 Antigravity 慢，主要不是读文件本身慢。我翻了自己几个星期的会话记录和桌面版日志，时间大多花在下面几处。
 
 <p align="center">
-  <img src="./assets/readme/how-it-works.svg" width="100%" alt="Antigravity 桌面版 Agent 的一个循环：模型每轮想 10 到 20 秒；工具调用先过本地白名单，名单里的命令直接执行，名单外的命令和改文件要先送云端审查，每次 2 到 3 秒；结果回到模型再想下一步。编号 1 到 4 是 fast-io 改变的地方。">
+  <img src="./assets/readme/before-after.webp" width="100%" alt="对比插画：没装插件时，Agent 一次只拿一页，在文件柜和书桌之间来回跑很多趟，每趟都要停在“云端审查”的关卡前等待；装上 fast-io 后，一次把要的页拿齐，走“免审通道”，一趟就到。">
 </p>
 
 **模型回合太多。** 模型每想一轮要 10 到 20 秒，工具执行本身只占很小一部分，所以多走一轮就多等一轮。可 Agent 习惯读一个文件、想一下、再读下一个；我的记录里，读文件的回合有将近一半只读了一个文件。它还常常只读几十行，不够再回头补，一个任务就这样拖出十几轮。
@@ -39,6 +39,10 @@ Antigravity 慢，主要不是读文件本身慢。我翻了自己几个星期�
 - 模型也有影响。我的记录里，同样的上下文长度下，Gemini 4 Carbon (High) 每轮比 Argon (High) 慢三成左右。
 
 ## fast-io 做了什么
+
+<p align="center">
+  <img src="./assets/readme/how-it-works.svg" width="100%" alt="Antigravity 桌面版 Agent 的一个循环：模型每轮想 10 到 20 秒；工具调用先过本地白名单，名单里的命令直接执行，名单外的命令和改文件要先送云端审查，每次 2 到 3 秒；结果回到模型再想下一步。编号 1 到 4 是 fast-io 改变的地方。">
+</p>
 
 图里的 4 个编号，对应规则里的 4 件事：
 

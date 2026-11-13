@@ -1,0 +1,15 @@
+用途：GitHub README 首屏插画，作为透明底素材合成进浅色版式的右侧，左侧是标题文字。
+主要需求：表现“一次把要看的文件都拿齐、轻快地往前走”，象征让 AI Agent 少跑几趟、更快完成任务。
+
+主体（只画这两个角色，不加任何其他人物、动物、脸或多余道具）：
+- 极简火柴人主角：圆脑袋，细圆框眼镜，点状眼睛，简单的微笑，细线条四肢。他朝画面左侧大步轻快地走，双臂抱着一叠整齐的文件（五六张纸，略微错开，能看出是好几页），神情轻松自信。
+- 圆滚滚的暖黄色边境牧羊犬，跟在主角身边一起朝左小跑，嘴里叼着一个卷起来的文件，开心的样子。
+- 身后有几道简洁的速度线，表示走得很快；画面上方点缀一两颗暖黄色小星星。
+
+构图：两个角色整体居中，朝向画面左侧；四周留出充足空白，任何线条、网点、角色都不要碰到画布边缘。
+
+风格：professional manga/comic ink illustration. Clean confident ink outlines with varying line weights, thick for contours and thin for details, not wobbly or sketchy. Use classic circular halftone screentone dot patterns for gray and shadow areas. Color usage is extremely restrained: mostly black, white, and gray halftone; warm yellow on the dog and the small stars; the documents can have a very light muted blue tint. No 3D, no glossy gradients, no photorealism.
+
+背景：背景完全透明，干净的 alpha 通道。没有底色、地面、投影，也没有任何画面外的不透明像素。
+
+图中文字：画面里没有任何文字、字母、logo 或水印。
