@@ -5,7 +5,7 @@
 ## 1. 找代码：先定位，再精读
 
 - 不知道代码在哪时，先用一条 `grep` 拿到文件和行号，不要靠逐个打开文件来找。
-  - 搜内容：`grep -rn 'Pattern' src tests`。写明要搜的源码目录，不要对 `.` 或含构建产物（如 `node_modules`、`dist`、`target`）的目录递归搜索。
+  - 搜内容：已知源码目录时优先用 `grep -rn 'Pattern' src tests`（免审），不要对 `.` 或含构建产物（如 `node_modules`、`dist`、`target`）的目录用 `grep` 递归搜索；需要全仓搜索、依赖 `.gitignore` 过滤或复杂正则时，允许改用 `rg`。
   - 只要文件名：`grep -rln 'Pattern' src`
   - 按文件名找文件：`git ls-files | grep -i 'name'`
   - 看结构：`ls src\module`、`git ls-files src\module | head -100`
@@ -27,7 +27,8 @@
 
 - 注意 `pwsh` 别名差异：`ls`（`Get-ChildItem`）、`cat`（`Get-Content`）、`diff`（`Compare-Object`）是 PowerShell 内置别名，**不要传 Unix 参数**（如 `ls -la`、`cat -n`、`diff -u`）；对比差异用 `git diff`。
 - 这些命令之间可以用 `|` 串起来，例如 `grep -rn 'x' src | head -50`。
-- 检索时不要用 `rg` `fd` `find` `sed` `awk` `sort` `uniq` `xargs` `python`。
+- 检索时不要用 `fd` `find` `sed` `awk` `sort` `uniq` `xargs` `python`。
+- `rg` 分级使用：明确目标源码目录时优先用免审的 `grep`；仅在需要 `.gitignore` 自动过滤、全仓搜索或复杂正则时使用 `rg`（非免审，约多 2 秒审查）。
 - 不要写 `&&` `||` `;` `>` `2>$null` `$(...)` 和反引号 `` ` ``，命令前不要加 `$env:VAR=...;`（也不要写 Bash 的 `2>/dev/null` 或 `VAR=value`），命令本身只写裸命令名（如 `grep`，不写完整 `.exe` 路径）。不写 `cd`；不在当前工作目录时，直接把单引号包裹的目标路径传给命令（如 `grep -rn 'x' 'D:\path\to\src'`），路径中不要带 `..`。
 - glob 和正则一律加单引号，例如 `--include='*.ts'`。
 - git 参数用长写法：`git log --max-count=5 --oneline`，不写 `-5`。
